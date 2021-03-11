@@ -31,7 +31,7 @@ server.get('/api/users/:id', async (req, res) => {
 		if (user) {
 			res.json(user);
 		} else {
-			res.status(404).json({ message: 'bad id' });
+			res.status(404).json({ message: `id ${id} does not exist` });
 		}
 	} catch (err) {
 		console.log(err);
@@ -57,6 +57,20 @@ server.post('/api/users', async (req, res) => {
 });
 
 // ?? DELETE ==> /api/users/:id ==> remove user
+server.delete('/api/users/:id', async (req, res) => {
+	const { id } = req.params;
+	try {
+		const user = await User.remove(id);
+		if (user) {
+			res.json(user);
+		} else {
+			res.status(404).json({ message: `id ${id} does not exist` });
+		}
+	} catch (err) {
+		console.log(err);
+		res.status(500).json({ error: err });
+	}
+});
 
 // ?? PUT ==> /api/users/:id ==> update user
 
