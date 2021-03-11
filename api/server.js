@@ -40,6 +40,21 @@ server.get('/api/users/:id', async (req, res) => {
 });
 
 // ?? POST ==> /api/users ==> create user
+server.post('/api/users', async (req, res) => {
+	const user = req.body;
+
+	if (!user.name || !user.bio) {
+		res.status(400).json({ message: 'name and bio required' });
+	} else {
+		try {
+			const newUser = await User.insert(user);
+			res.status(200).json(newUser);
+		} catch (err) {
+			console.log(err);
+			res.status(500).json({ error: err });
+		}
+	}
+});
 
 // ?? DELETE ==> /api/users/:id ==> remove user
 
