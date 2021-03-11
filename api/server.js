@@ -2,7 +2,7 @@
 
 // ** Imports
 const express = require('express');
-const Users = require('./users/model');
+const User = require('./users/model');
 
 // ** Express
 const server = express();
@@ -15,7 +15,7 @@ server.use(express.json());
 // ?? GET ==> /api/users ==> return array
 server.get('/api/users', async (req, res) => {
 	try {
-		const users = await Users.find();
+		const users = await User.find();
 		res.json(users);
 	} catch (err) {
 		console.log(err);
@@ -24,6 +24,20 @@ server.get('/api/users', async (req, res) => {
 });
 
 // ?? GET ==> /api/users/:id ==> return user object
+server.get('/api/users/:id', async (req, res) => {
+	const { id } = req.params;
+	try {
+		const user = await User.findById(id);
+		if (user) {
+			res.json(user);
+		} else {
+			res.status(404).json({ message: 'bad id' });
+		}
+	} catch (err) {
+		console.log(err);
+		res.status(500).json({ error: err });
+	}
+});
 
 // ?? POST ==> /api/users ==> create user
 
