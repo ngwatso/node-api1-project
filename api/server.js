@@ -73,6 +73,21 @@ server.delete('/api/users/:id', async (req, res) => {
 });
 
 // ?? PUT ==> /api/users/:id ==> update user
+server.put('/api/users/:id', async (req, res) => {
+	const { id } = req.params;
+	const user = req.body;
+	try {
+		const updateUser = await User.update(id, user);
+		if (user) {
+			res.json(user);
+		} else {
+			res.status(404).json({ message: `id ${id} does not exist` });
+		}
+	} catch (err) {
+		console.log(err);
+		res.status(500).json({ error: err });
+	}
+});
 
 // !! EXPORT YOUR SERVER instead of {}
 module.exports = server;
